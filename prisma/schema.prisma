@@ -10,6 +10,10 @@ datasource db {
 model User {
     id       Int     @id @default(autoincrement())
     username String
+    email    String
+    @@unique([username, email])
+    name     String
+    password String
     orders   Order[]
 }
 
