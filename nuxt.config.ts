@@ -4,4 +4,11 @@ export default defineNuxtConfig({
     authSecret: process.env.SECRET,
   },
   modules: ["@sidebase/nuxt-auth"],
+  css: ["~/assets/css/main.css"],
+  postcss: {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
 });

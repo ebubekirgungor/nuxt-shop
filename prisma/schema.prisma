@@ -11,10 +11,11 @@ model User {
     id       Int     @id @default(autoincrement())
     username String
     email    String
-    @@unique([username, email])
     name     String
     password String
     orders   Order[]
+
+    @@unique([username, email])
 }
 
 model Category {
@@ -28,17 +29,15 @@ model Product {
     title          String
     category_id    Int
     category       Category @relation(fields: [category_id], references: [id])
-    author         String
     list_price     Float
     stock_quantity Int
     orders         Order[]
 }
 
 model Order {
-    id                     Int       @id @default(autoincrement())
-    price_without_discount Float
-    discounted_price       Float
-    user_id                Int
-    user                   User      @relation(fields: [user_id], references: [id])
-    products               Product[]
+    id          Int       @id @default(autoincrement())
+    total_price Float
+    user_id     Int
+    user        User      @relation(fields: [user_id], references: [id])
+    products    Product[]
 }
