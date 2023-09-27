@@ -6,7 +6,11 @@ export default defineEventHandler(async (event) => {
   try {
     console.log("Find products");
     if (session) {
-      const productsData = await prisma.product.findMany();
+      const productsData = await prisma.product.findMany({
+        include: {
+          category: true,
+        },
+      });
 
       return productsData;
     }

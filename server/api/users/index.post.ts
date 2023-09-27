@@ -14,9 +14,13 @@ export default defineEventHandler(async (event) => {
   );
   const session = await getServerSession(event);
   try {
-    const userData = await prisma.user.findUnique({
-      where: { username_email: { username, email } },
-    });
+    const userData =
+      (await prisma.user.findUnique({
+        where: { username: username },
+      })) ||
+      (await prisma.user.findUnique({
+        where: { email: email },
+      }));
     if (userData) {
       console.log(`User with email ${email} already exists`);
       event.node.res.statusCode = 409;

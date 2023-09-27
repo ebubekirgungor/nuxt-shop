@@ -1,30 +1,34 @@
 import { prisma } from "../../db";
 import { getServerSession } from "#auth";
 export default defineEventHandler(async (event) => {
-  const userId = getRouterParam(event, "id") as any;
-  console.log(`GET /api/users/${userId}`);
+  const productId = getRouterParam(event, "id") as any;
+  console.log(`GET /api/products/${productId}`);
   const session = await getServerSession(event);
   try {
-    console.log("Find user");
-    const userData = await prisma.user.findUnique({
-      where: { id: parseInt(userId) },
+    console.log("Find product");
+    const productData = await prisma.product.findUnique({
+      where: { id: parseInt(productId) },
+      include: {
+        category: true,
+      },
     });
-    if (userData) {
-      console.log("User found");
+    if (productData) {
+      console.log("Product found");
       return {
-        id: userData.id,
-        username: userData.username,
-        email: userData.email,
-        name: userData.name,
+        id: productData.id,
+        title: productData.title,
+        category_id: productData.category_id,
+        list_price: productData.list_price,
+        stock_quantity: productData.stock_quantity,
       };
     } else if (!session) {
       return "NOT_LOGGED_IN";
     } else {
-      console.log("User not found");
+      console.log("Product not found");
       event.node.res.statusCode = 404;
       return {
-        code: "USER_NOT_FOUND",
-        message: `User with id ${userId} doesn't exists.`,
+        code: "PRODUCT_NOT_FOUND",
+        message: `Product with id ${productId} doesn't exists.`,
       };
     }
   } catch (err) {

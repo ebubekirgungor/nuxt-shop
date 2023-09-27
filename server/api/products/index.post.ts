@@ -2,9 +2,9 @@ import { prisma } from "../../db";
 import { getServerSession } from "#auth";
 interface IRequestBody {
   title: string;
-  category_id: number;
-  list_price: number;
-  stock_quantity: number;
+  category_id: number | any;
+  list_price: number | any;
+  stock_quantity: number | any;
 }
 export default defineEventHandler(async (event) => {
   console.log("POST /api/products");
@@ -20,9 +20,9 @@ export default defineEventHandler(async (event) => {
       await prisma.product.create({
         data: {
           title,
-          category_id,
-          list_price,
-          stock_quantity,
+          category_id: parseInt(category_id),
+          list_price: parseInt(list_price),
+          stock_quantity: parseInt(stock_quantity),
         },
       });
       event.node.res.statusCode = 200;

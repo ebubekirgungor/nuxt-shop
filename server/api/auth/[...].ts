@@ -26,9 +26,13 @@ export default NuxtAuthHandler({
       async authorize(credentials: any) {
         const username = credentials?.username;
         const email = credentials?.email;
-        const userData = await prisma.user.findUnique({
-          where: { username_email: { username, email } },
-        });
+        const userData =
+          (await prisma.user.findUnique({
+            where: { username: username },
+          })) ||
+          (await prisma.user.findUnique({
+            where: { email: email },
+          }));
 
         if (!userData) {
           console.log("User not found");
