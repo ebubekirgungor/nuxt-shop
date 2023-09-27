@@ -1,28 +1,20 @@
 import { prisma } from "../../db";
-import { getServerSession } from "#auth";
 export default defineEventHandler(async (event) => {
   const productId = getRouterParam(event, "id") as any;
   console.log(`GET /api/products/${productId}`);
-  const session = await getServerSession(event);
   try {
     console.log("Find product");
-    const productData = await prisma.product.findUnique({
+    const product = await prisma.product.findUnique({
       where: { id: parseInt(productId) },
       include: {
-        category: true,
+        category: {
+          select: { title: true },
+        },
       },
     });
-    if (productData) {
+    if (product) {
       console.log("Product found");
-      return {
-        id: productData.id,
-        title: productData.title,
-        category_id: productData.category_id,
-        list_price: productData.list_price,
-        stock_quantity: productData.stock_quantity,
-      };
-    } else if (!session) {
-      return "NOT_LOGGED_IN";
+      return product;
     } else {
       console.log("Product not found");
       event.node.res.statusCode = 404;

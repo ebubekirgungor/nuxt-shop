@@ -17,9 +17,13 @@ export default defineEventHandler(async (event) => {
     if (session) {
       await prisma.user.update({
         where: { id: parseInt(userId) },
-        data: { username: username, email: email, password: password, name: name }
-      }
-      );
+        data: {
+          username: username,
+          email: email,
+          password: password,
+          name: name,
+        },
+      });
       return "SUCCESS";
     } else {
       return "NOT_LOGGED_IN";

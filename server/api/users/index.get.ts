@@ -6,9 +6,18 @@ export default defineEventHandler(async (event) => {
   try {
     console.log("Find users");
     if (session) {
-      const usersData = await prisma.user.findMany();
-
-      return usersData;
+      const users = await prisma.user.findMany({
+        select: {
+          id: true,
+          username: true,
+          email: true,
+          name: true,
+        },
+      });
+      return users;
+    } else {
+      event.node.res.statusCode = 403;
+      return "NOT_LOGGED_IN";
     }
   } catch (err) {
     console.dir(err);

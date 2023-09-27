@@ -2,9 +2,9 @@ import { prisma } from "../../db";
 import { getServerSession } from "#auth";
 interface IRequestBody {
   title: string;
-  category_id: number | any;
-  list_price: number | any;
-  stock_quantity: number | any;
+  category_id: any;
+  list_price: any;
+  stock_quantity: any;
 }
 export default defineEventHandler(async (event) => {
   console.log("POST /api/products");

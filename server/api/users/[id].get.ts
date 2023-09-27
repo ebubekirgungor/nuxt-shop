@@ -6,17 +6,18 @@ export default defineEventHandler(async (event) => {
   const session = await getServerSession(event);
   try {
     console.log("Find user");
-    const userData = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: parseInt(userId) },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        name: true,
+      },
     });
-    if (userData) {
+    if (user) {
       console.log("User found");
-      return {
-        id: userData.id,
-        username: userData.username,
-        email: userData.email,
-        name: userData.name,
-      };
+      return user;
     } else if (!session) {
       return "NOT_LOGGED_IN";
     } else {
